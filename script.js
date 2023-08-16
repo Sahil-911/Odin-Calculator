@@ -15,7 +15,7 @@ function addNumber(number) {
     if (currentNumber == 0) {
         currentNumber = number;
     } else {
-        currentNumber = currentNumber + number;
+        currentNumber = currentNumber * 10 + number;
     }
     result.innerHTML = currentNumber;
 }
@@ -32,24 +32,27 @@ function addOperator(op) {
 }
 
 function calculate() {
-    if (operator == "+") {
-        currentNumber = previousNumber + currentNumber;
-    } else if (operator == "-") {
-        currentNumber = previousNumber - currentNumber;
-    } else if (operator == "*") {
-        currentNumber = previousNumber * currentNumber;
-    } else if (operator == "/") {
-        if(currentNumber == 0) {
-            alert("Cannot divide by zero");
-            clearAll();
-            return;
-        }
-        currentNumber = previousNumber / currentNumber;
+    let answer = 0;
+    switch (operator) {
+        case '+':
+            answer = parseInt(previousNumber) + parseInt(currentNumber);
+            break;
+        case '-':
+            answer = parseInt(previousNumber) - parseInt(currentNumber);
+            break;
+        case '*':
+            answer = parseInt(previousNumber) * parseInt(currentNumber);
+            break;
+        case '/':
+            answer = parseInt(previousNumber) / parseInt(currentNumber);
+            break;
     }
-    result.innerHTML = currentNumber;
-    historyText = historyText + " " + currentNumber;
-    history.innerHTML = historyText;
+    result.innerHTML = answer;
+    currentNumber = answer;
+    previousNumber = 0;
     operator = null;
+    historyText = "0";
+    history.innerHTML = historyText;
 }
 
 function clearAll() {
@@ -73,7 +76,7 @@ function backspace() {
 
 numberButtons.forEach((button) => {
     button.addEventListener('click', () => {
-        addNumber(button.innerHTML);
+        addNumber(parseInt(button.innerHTML));
     })
 })
 
@@ -93,4 +96,18 @@ clearAllButton.addEventListener('click', () => {
 
 backspaceButton.addEventListener('click', () => {
     backspace();
+})
+
+document.addEventListener('keydown', (event) => {
+    if (event.key >= 0 && event.key <= 9) {
+        addNumber(parseInt(event.key));
+    } else if (event.key == '+' || event.key == '-' || event.key == '*' || event.key == '/') {
+        addOperator(event.key);
+    } else if (event.key == 'Enter') {
+        calculate();
+    } else if (event.key == 'Backspace') {
+        backspace();
+    } else if (event.key == 'Escape' || event.key == 'Delete') {
+        clearAll();
+    }
 })
