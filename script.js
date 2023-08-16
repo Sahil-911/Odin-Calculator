@@ -44,6 +44,11 @@ function calculate() {
             answer = parseInt(previousNumber) * parseInt(currentNumber);
             break;
         case '/':
+            if(currentNumber == 0) {
+                alert("Cannot divide by zero");
+                clearAll();
+                return;
+            }
             answer = parseInt(previousNumber) / parseInt(currentNumber);
             break;
     }
